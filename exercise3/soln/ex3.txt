@@ -1,0 +1,93 @@
+Question1
+
+db.movies.aggregate([
+  {
+    $project: {
+      movie_name: "$title",
+      released_year: { $year: "$released" }
+    }
+  },
+  {
+    $match: { released_year: { $gt: 1900 } }
+  }
+]);
+
+
+------------------------------------------------------------------------------
+Question2
+
+db.movies.aggregate([
+  {
+    $match: {
+      "imdb.rating": {
+        $gte: 8.0
+      }
+    }
+  },
+  {
+    $project: {
+      movie_name: "$title"
+    }
+  }
+]);
+
+
+
+------------------------------------------------------------------------------
+Question3
+
+
+db.comments.find({
+  name: "Petyr Baelish"
+});
+
+
+------------------------------------------------------------------------------
+Question4
+
+db.comments.aggregate([
+  { $group: { _id: "$movie_id", count: { $sum: 1 } } },
+  { $sort: { count: -1 } },
+  { $limit: 1 }
+]);
+
+
+
+
+------------------------------------------------------------------------------
+Question5
+
+
+db.theatres.aggregate([
+  { $group: { _id: "$location.address.state", no_of_theatres: { $sum: 1 } } },
+  {
+    $project: {
+      _id: 1,
+      no_of_theatres: 1
+    }
+  },
+  { $sort: { no_of_theatres: -1 } },
+  { $limit: 1 }
+]);
+
+
+
+------------------------------------------------------------------------------
+Question6
+
+
+db.comments.aggregate([
+  { $group: { _id: "$name", no_of_comments: { $sum: 1 } } },
+  { $sort: { no_of_comments: -1 } },
+  {
+    $project: {
+      _id: 1,
+      no_of_comments: 1
+    }
+  },
+  { $limit: 5 }
+]);
+
+
+
+------------------------------------------------------------------------------
